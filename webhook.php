@@ -14,7 +14,7 @@ if (isset($update['message'])) {
             'keyboard' => [],
             'inline_keyboard' => [[
                 [
-                    'text' => '🧩 Open Mini App',
+                    'text' => 'اجرای مینی‌اپ',
                     'web_app' => ['url' => 'https://mainbot-g94g.onrender.com/mini-app/index.html']
                 ]
             ]]
@@ -22,7 +22,7 @@ if (isset($update['message'])) {
 
         $reply = [
             'chat_id' => $chat_id,
-            'text' => "👋 Welcome to Afghan Code!\nClick the button below to open the mini app.",
+            'text' => "به ربات رسمی Afghan Coders خوش آمدید!\nبا ضربه زدن روی دکمه زیر مینی‌اپ Afghan Coders را اجرا کنید!",
             'reply_markup' => json_encode($keyboard)
         ];
 
