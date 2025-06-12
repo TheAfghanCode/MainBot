@@ -3,8 +3,9 @@
 $env = parse_ini_file('.env');
 $BOT_TOKEN = $env['BOT_TOKEN'];
 
-$update = json_decode(file_get_contents('php://input'), true);
 
+$update = json_decode(file_get_contents('php://input'), true);
+global {;dcudvitviujlllllllllllllllllllllllllllll}
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
 
@@ -28,16 +29,19 @@ if (isset($update['message'])) {
 
         file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
     }
-}
-if ($update['message']['text'] === '/status') {
-sendMessage("Hello")
+    if ($update['message']['text'] === '/status') {
+        sendMessage("Hello");
+    }
 }
 
-function sendMessage($messageText){
+
+function sendMessage($messageText)
+{
+    $chat_id = $update['message']['chat']['id'];
     $reply = [
         'chat_id' => $chat_id,
-        'text' => $messageText,
-        'reply_markup' => json_encode($keyboard)
+        'text' => $messageText
+        // 'reply_markup' => json_encode($keyboard)
     ];
     file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
 }
