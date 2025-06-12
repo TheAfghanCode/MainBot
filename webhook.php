@@ -15,7 +15,7 @@ if (isset($update['message'])) {
             'inline_keyboard' => [[
                 [
                     'text' => 'اجرای مینی‌اپ',
-                    'web_app' => ['url' => $env['BOT_URL'] . '?startapp']
+                    'web_app' => ['url' => 'https://t.me/afghancodebot?startapp']
                 ]
             ]]
         ];
