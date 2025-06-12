@@ -8,7 +8,7 @@ const user_id = tg.initDataUnsafe?.user?.id;
 if (user_id) {
 }
 //   };
-
+// ijuiyyu
 function sendMessage(messageText) {
   fetch("https://mainbot-g94g.onrender.com/index.php", {
     method: "POST",
