@@ -29,4 +29,15 @@ if (isset($update['message'])) {
         file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
     }
 }
-?>
+if ($update['message']['text'] === '/status') {
+sendMessage("Hello")
+}
+
+function sendMessage($messageText){
+    $reply = [
+        'chat_id' => $chat_id,
+        'text' => $messageText,
+        'reply_markup' => json_encode($keyboard)
+    ];
+    file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
+}
