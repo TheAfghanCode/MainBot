@@ -15,7 +15,7 @@ if (isset($update['message'])) {
             'inline_keyboard' => [[
                 [
                     'text' => '🧩 Open Mini App',
-                    'web_app' => ['url' => 'https://your-render-url.com/mini-app/index.html']
+                    'web_app' => ['url' => 'https://mainbot-g94g.onrender.com/mini-app/index.html']
                 ]
             ]]
         ];
