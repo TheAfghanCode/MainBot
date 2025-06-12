@@ -1,38 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Afghan Code Mini App</title>
-  <link rel="stylesheet" href="../asset/style/index.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script>
-    window.onload = () => {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-      tg.expand();
-  
-      const user_id = tg.initDataUnsafe?.user?.id;
-  
-      if (user_id) {
-        fetch("https://mainbot-g94g.onrender.com/index.php", {
-          method: "POST",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: user_id,
-            message: "شما با موفقیت وارد مینی‌اپ شدید!\nآی‌دی:" + user_id
-          })
-        });
-      }
-    };
-  </script>
-  
-</head>
-<body>
-  
-  <main class="container">
-    <h1>به مینی‌اپ جامعه توسعه دهندگان افغان کدرز خوش‌آمدید!</h1>
-    <p>متن آزمایشی</p>
-  </main>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Afghan Code Mini App</title>
+    <link rel="stylesheet" href="../asset/style/index.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="../asset/script/index.js"></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>به مینی‌اپ جامعه توسعه دهندگان افغان کدرز خوش‌آمدید!</h1>
+      <p>متن آزمایشی</p>
+      <script>
+        sendMessage("jadksjfj")
+      </script>
+    </main>
+  </body>
 </html>
