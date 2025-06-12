@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Afghan Code Mini App</title>
+  <script>
+    window.onload = () => {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+  
+      const user_id = tg.initDataUnsafe?.user?.id;
+  
+      if (user_id) {
+        fetch("https://your-render-url.com/index.php", {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: user_id,
+            message: "✅ Mini App opened successfully!"
+          })
+        });
+      }
+    };
+  </script>
+  
+</head>
+<body>
+  <h1>Hello from Afghan Code Mini App!</h1>
+</body>
+</html>
