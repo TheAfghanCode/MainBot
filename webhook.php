@@ -7,7 +7,15 @@ $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
 
-file_put_contents("log2.txt", date("H:i:s") . " - " . print_r($update, true) . "\n", FILE_APPEND);
+// ساخت محتوای لاگ با حفظ یونیکد (مثل فارسی)
+$logData = json_encode($update, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+// ساخت مسیر فایل
+$logFilePath = __DIR__ . "/log2.txt"; // ذخیره کنار webhook.php
+
+// ذخیره اطلاعات با افزودن زمان
+file_put_contents($logFilePath, "[" . date("Y-m-d H:i:s") . "]\n" . $logData . "\n\n", FILE_APPEND);
+
 
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
