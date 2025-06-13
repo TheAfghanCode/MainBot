@@ -15,7 +15,7 @@ if (isset($update['message'])) {
             'inline_keyboard' => [[
                 [
                     'text' => 'اجرای مینی‌اپ',
-                    'web_app' => ['url' => 'https://mainbot-g94g.onrender.com/mini-app/index.html']
+                    'url' => ['url' => 'https://t.me/afghancodebot?startapp']
                 ]
             ]]
         ];
@@ -32,7 +32,7 @@ if (isset($update['message'])) {
     }
 }
 
-function sendMessage($messageText)
+function sendMessage($messageText = "This a Test From sendmessage() at webhook.php")
 {
     global $update, $BOT_TOKEN;
     $chat_id = $update['message']['chat']['id'];
