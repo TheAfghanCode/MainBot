@@ -5,7 +5,7 @@ $BOT_TOKEN = $env['BOT_TOKEN'];
 
 
 $update = json_decode(file_get_contents('php://input'), true);
-global {;dcudvitviujlllllllllllllllllllllllllllll}
+
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
 
@@ -29,7 +29,7 @@ if (isset($update['message'])) {
 
         file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
     }
-    if ($update['message']['text'] === '/status') {
+    elseif ($update['message']['text'] === '/status') {
         sendMessage("Hello");
     }
 }
