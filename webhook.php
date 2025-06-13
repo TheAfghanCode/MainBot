@@ -7,6 +7,26 @@ $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
 
+
+
+$CHANNEL_ID = '-1002635335795';
+// آیدی کانال با منفی
+
+$logMessage = "🧾 New log at " . date("Y-m-d H:i:s") . "\n\n";
+$logMessage .= json_encode($update, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+$urlLog = "https://api.telegram.org/bot$BOT_TOKEN/sendMessage";
+
+$dataLog = [
+    'chat_id' => $CHANNEL_ID,
+    'text' => $logMessage
+];
+
+file_get_contents($urlLog . "?" . http_build_query($dataLog));
+
+
+
+
 // ساخت محتوای لاگ با حفظ یونیکد (مثل فارسی)
 $logData = json_encode($update, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
