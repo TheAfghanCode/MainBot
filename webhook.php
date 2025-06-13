@@ -6,6 +6,8 @@ $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
 
+file_put_contents("log2.txt", date("H:i:s") . " - " . print_r($update, true) . "\n", FILE_APPEND);
+
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
     $text = $update['message']['text'] ?? '';
