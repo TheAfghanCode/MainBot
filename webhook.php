@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 if (!file_exists('.env')) exit('Env file not found');
 
 $env = parse_ini_file('.env');
