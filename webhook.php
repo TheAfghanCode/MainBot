@@ -1,18 +1,17 @@
 <?php
-// Load env variables
+if (!file_exists('.env')) exit('Env file not found');
+
 $env = parse_ini_file('.env');
 $BOT_TOKEN = $env['BOT_TOKEN'];
-
 
 $update = json_decode(file_get_contents('php://input'), true);
 
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
+    $text = $update['message']['text'] ?? '';
 
-    // If /start command
-    if ($update['message']['text'] === '/start') {
+    if ($text === '/start') {
         $keyboard = [
-            'keyboard' => [],
             'inline_keyboard' => [[
                 [
                     'text' => 'اجرای مینی‌اپ',
@@ -28,20 +27,20 @@ if (isset($update['message'])) {
         ];
 
         file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
-    }
-    elseif ($update['message']['text'] === '/status') {
-        sendMessage("Hello");
+    } elseif ($text === '/status') {
+        sendMessage("ربات آنلاین است ✅");
     }
 }
 
-
 function sendMessage($messageText)
 {
+    global $update, $BOT_TOKEN;
     $chat_id = $update['message']['chat']['id'];
+
     $reply = [
         'chat_id' => $chat_id,
         'text' => $messageText
-        // 'reply_markup' => json_encode($keyboard)
     ];
+
     file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
 }
