@@ -1,8 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
-if (!file_exists('.env')) exit('Env file not found');
-$env = parse_ini_file('.env');
+
 $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
