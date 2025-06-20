@@ -1,13 +1,13 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
-
-$BOT_TOKEN = $env['BOT_TOKEN'];
+$BOT_TOKEN = getenv('BOT_TOKEN');
+// $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
 if (!$update) exit('No update received');
 
-$CHANNEL_ID = $env["LOG_CHANNEL"];
+$CHANNEL_ID = getenv("LOG_CHANNEL");
 
 $logMessage = "🧾 New log at " . date("Y-m-d H:i:s") . "\n\n";
 $logMessage .= json_encode($update, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
