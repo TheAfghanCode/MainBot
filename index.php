@@ -1,5 +1,5 @@
 <?php
-$env = parse_ini_file('.env');
+
 $BOT_TOKEN = $env['BOT_TOKEN'];
 
 $data = json_decode(file_get_contents("php://input"), true);
