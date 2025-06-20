@@ -1,6 +1,6 @@
 <?php
 
-$BOT_TOKEN = $env['BOT_TOKEN'];
+$BOT_TOKEN = getenv('BOT_TOKEN');
 
 $data = json_decode(file_get_contents("php://input"), true);
 
