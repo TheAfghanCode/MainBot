@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مستندات پروژه مینی‌اپ افغان کد</title>
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Vazirmatn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Prism.js for Syntax Highlighting -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <style>
+      /* === Custom Styles for Documentation Page v2.0 === */
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Vazirmatn", sans-serif;
+        background-color: #0d1117; /* GitHub Dark Blue */
+        color: #c9d1d9; /* GitHub Dark Text */
+      }
+      /* Glass Effect */
+      .glass-effect {
+        background: rgba(13, 17, 23, 0.7);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border-bottom: 1px solid #30363d;
+      }
+      .sidebar-glass {
+        background: rgba(13, 17, 23, 0.85);
+        backdrop-filter: blur(12px) saturate(180%);
+        border-left: 1px solid #30363d;
+      }
+      /* Custom styles for documentation content */
+      .doc-content h2 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        padding-bottom: 0.75rem;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid #30363d;
+      }
+      .doc-content h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        padding-bottom: 0.5rem;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #21262d;
+      }
+      .doc-content p,
+      .doc-content ul {
+        line-height: 1.8;
+        margin-bottom: 1.25rem;
+        color: #adbac7;
+        font-size: 1.1rem;
+      }
+      .doc-content ul {
+        list-style-type: disc;
+        padding-right: 2rem;
+      }
+      .doc-content a {
+        color: #58a6ff;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .doc-content a:hover {
+        color: #79c0ff;
+      }
+      .doc-content code:not(pre > code) {
+        background-color: rgba(110, 118, 129, 0.2);
+        color: #c9d1d9;
+        padding: 0.2em 0.4em;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 0.95em;
+      }
+      /* Code Block Styling */
+      pre {
+        direction: ltr; /* LTR for code blocks */
+        text-align: left;
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+      pre[class*="language-"] {
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #30363d;
+        font-size: 1rem;
+      }
+      .copy-btn {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background-color: #374151;
+        color: white;
+        border: none;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        opacity: 0.3;
+        transition: opacity 0.3s, background-color 0.3s;
+        font-size: 0.8rem;
+      }
+      pre:hover .copy-btn {
+        opacity: 1;
+      }
+      .copy-btn:hover {
+        background-color: #4b5563;
+      }
+
+      /* Sidebar styling */
+      .sidebar-link {
+        transition: all 0.2s ease-in-out;
+        position: relative;
+      }
+      .sidebar-link.active {
+        color: white;
+        font-weight: 700;
+        background-color: #1f6feb;
+      }
+
+      #sidebar {
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      body.mobile-menu-open {
+        overflow: hidden;
+      }
+      body.mobile-menu-open #sidebar {
+        transform: translateX(0);
+      }
+      body.mobile-menu-open #overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    </style>
+  </head>
+  <body class="text-lg">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+      <div
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <div class="flex items-center gap-3">
+          <svg
+            role="img"
+            aria-label="Afghan Code Logo"
+            class="w-8 h-8 text-indigo-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 3L12 8L16 3"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 21L12 16L8 21"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M4 12L2 10L4 8"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M20 12L22 14L20 16"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <h1 class="text-2xl font-bold text-white">
+            مستندات پروژه مینی‌اپ افغان کد
+          </h1>
+        </div>
+        <button id="mobile-menu-toggle" class="md:hidden text-white z-[60]">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Overlay for mobile menu -->
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+    ></div>
+
+    <div class="max-w-screen-xl mx-auto px-6 pt-24">
+      <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+        <!-- Sidebar Navigation -->
+        <aside
+          id="sidebar"
+          class="fixed md:sticky lg:col-span-3 top-0 right-0 h-full w-72 lg:w-auto flex-shrink-0 z-40 lg:top-24 lg:h-[calc(100vh-6rem)] transform translate-x-full lg:translate-x-0 pt-24 lg:pt-0 sidebar-glass lg:sidebar-glass-none lg:bg-transparent"
+        >
+          <nav
+            id="sidebar-nav"
+            class="flex flex-col space-y-2 pr-6 lg:pr-4 h-full p-6 lg:p-0"
+          >
+            <a href="#introduction" class="sidebar-link px-4 py-2.5 rounded-md"
+              >مقدمه</a
+            >
+            <a href="#structure" class="sidebar-link px-4 py-2.5 rounded-md"
+              >ساختار کلی</a
+            >
+            <a href="#customization" class="sidebar-link px-4 py-2.5 rounded-md"
+              >شخصی‌سازی داده‌ها</a
+            >
+            <a href="#styling" class="sidebar-link px-4 py-2.5 rounded-md"
+              >استایل و انیمیشن</a
+            >
+          </nav>
+        </aside>
+
+        <!-- Main Documentation Content -->
+        <main class="doc-content lg:col-span-9">
+          <section id="introduction" class="scroll-mt-24">
+            <h2>معرفی مستندات</h2>
+            <p>
+              به مستندات پروژه Afghan Code خوش آمدید! این راهنما به شما کمک
+              می‌کند تا به راحتی کد مینی‌اپ را درک کرده و آن را بر اساس نیازهای
+              تیم خود شخصی‌سازی کنید. این پروژه با استفاده از تکنولوژی‌های مدرن
+              و محبوب فرانت‌اند مانند
+              <a
+                href="https://tailwindcss.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >TailwindCSS</a
+              >،
+              <a
+                href="https://gsap.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GSAP</a
+              >
+              و
+              <a
+                href="https://threejs.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Three.js</a
+              >
+              ساخته شده تا یک تجربه بصری خیره‌کننده ارائه دهد.
+            </p>
+            <p>
+              هدف اصلی این پروژه، ارائه یک ویترین حرفه‌ای و جذاب برای معرفی تیم
+              توسعه، خدمات و دستاوردهای آن است. تمام کدها در یک فایل واحد
+              (`index.html`) نوشته شده‌اند تا استفاده و ویرایش آن به ساده‌ترین
+              شکل ممکن باشد.
+            </p>
+          </section>
+
+          <section id="structure" class="scroll-mt-24">
+            <h2>ساختار کلی فایل</h2>
+            <p>
+              کد پروژه به چند بخش اصلی تقسیم شده است که درک آن‌ها برای ویرایش
+              آسان ضروری است.
+            </p>
+            <ul>
+              <li>
+                <code>&lt;head&gt;</code>: در این بخش، تمام وابستگی‌ها مانند
+                TailwindCSS، فونت وزیر، GSAP، Three.js و Prism.js (برای هایلایت
+                کد) از طریق CDN فراخوانی شده‌اند. همچنین، استایل‌های سفارشی در
+                تگ <code>&lt;style&gt;</code> قرار دارند.
+              </li>
+              <li>
+                <code>&lt;body&gt;</code>: بدنه اصلی صفحه که شامل تمام بخش‌های
+                قابل مشاهده است.
+              </li>
+              <li>
+                <code>&lt;header&gt;</code>: هدر هوشمند صفحه که در اسکرول ظاهر
+                می‌شود.
+              </li>
+              <li>
+                <code>&lt;main&gt;</code>: محتوای اصلی صفحه که به چند
+                <code>&lt;section&gt;</code> تقسیم شده است: بخش Hero، خدمات،
+                تیم، انجمن‌ها و بلاگ.
+              </li>
+              <li><code>&lt;footer&gt;</code>: فوتر ساده و زیبای پروژه.</li>
+              <li>
+                <code>&lt;script&gt;</code>: در انتهای فایل، تمام منطق
+                جاوااسکریپت برای داینامیک کردن محتوا، مدیریت انیمیشن‌ها و
+                تعاملات کاربر قرار دارد.
+              </li>
+            </ul>
+          </section>
+
+          <section id="customization" class="scroll-mt-24">
+            <h2>شخصی‌سازی داده‌ها</h2>
+            <p>
+              یکی از مهم‌ترین بخش‌های این پروژه، قابلیت شخصی‌سازی آسان محتوا از
+              طریق ویرایش متغیرهای جاوااسکریپت است. تمام داده‌های متنی و تصویری
+              در ابتدای تگ <code>&lt;script&gt;</code> در قالب آرایه‌هایی از
+              اشیاء (Arrays of Objects) تعریف شده‌اند.
+            </p>
+            <h3>افزودن یک عضو جدید به تیم</h3>
+            <p>
+              برای اضافه کردن یک عضو جدید به تیم، کافیست یک آبجکت جدید به آرایه
+              <code>teamData</code> اضافه کنید. ساختار این آبجکت باید مانند
+              نمونه زیر باشد:
+            </p>
+            <pre><code class="language-javascript">// In the teamData array, add a new object:
+{ 
+    name: 'نام عضو جدید', 
+    role: 'سِمَت عضو', 
+    skills: ['مهارت ۱', 'مهارت ۲'], 
+    avatar: 'https://placehold.co/120x120/......', // Profile image link
+    socials: { github: '#', linkedin: '#' }, 
+    glowColor: 'var(--glow-color-sky)' // Card glow color
+}
+</code><button class="copy-btn">کپی</button></pre>
+            <p>
+              پس از ذخیره کردن فایل، عضو جدید به صورت خودکار به لیست اعضای تیم
+              اضافه خواهد شد و تمام انیمیشن‌ها و استایل‌ها برای آن اعمال می‌شود.
+            </p>
+          </section>
+
+          <section id="styling" class="scroll-mt-24">
+            <h2>استایل و انیمیشن</h2>
+            <h3>تغییر استایل‌ها با TailwindCSS</h3>
+            <p>
+              این پروژه به طور کامل با
+              <a
+                href="https://tailwindcss.com/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                >TailwindCSS</a
+              >
+              استایل‌دهی شده است. این به شما اجازه می‌دهد تا بدون نوشتن CSS
+              سفارشی، به راحتی ظاهر هر المان را تغییر دهید. برای مثال، برای
+              تغییر رنگ یک دکمه، کافیست کلاس‌های <code>bg-</code> و
+              <code>text-</code> مربوط به آن را ویرایش کنید.
+            </p>
+            <h3>منطق انیمیشن‌ها با GSAP</h3>
+            <p>
+              تمام انیمیشن‌های این پروژه با استفاده از کتابخانه قدرتمند
+              <a
+                href="https://gsap.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GSAP</a
+              >
+              پیاده‌سازی شده‌اند. منطق انیمیشن‌ها در انتهای فایل جاوااسکریپت
+              قرار دارد.
+            </p>
+            <pre><code class="language-javascript">// Example: Team card entrance animation
+gsap.from(".holographic-card", { 
+    scrollTrigger: { 
+        trigger: "#team-section", // Activates when the team section is reached
+        start: 'top 75%' // Animation starts when 75% of the section is in view
+    }, 
+    opacity: 0, 
+    y: 100, 
+    duration: 1, 
+    stagger: 0.2, // Delay between each card's animation
+    ease: 'power3.out' 
+});
+</code><button class="copy-btn">کپی</button></pre>
+            <p>
+              با تغییر پارامترهای این توابع، می‌توانید رفتار، سرعت و نوع
+              انیمیشن‌ها را به طور کامل شخصی‌سازی کنید. استفاده از `ease` های
+              مختلف مانند `elastic.out` یا `back.out` می‌تواند به انیمیشن‌های
+              شما حس طبیعی‌تری ببخشد.
+            </p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- jQuery via CDN, loaded just before it's used -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // --- GSAP & ScrollTrigger Setup ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- UI Interactions ---
+
+        // Smooth scrolling for sidebar links
+        $(".sidebar-link").on("click", function (event) {
+          if (this.hash !== "") {
+            event.preventDefault();
+            var hash = this.hash;
+            gsap.to(window, {
+              duration: 1.2,
+              scrollTo: { y: hash, offsetY: 100 },
+              ease: "power3.inOut",
+            });
+
+            // Close mobile menu after click
+            if ($("body").hasClass("mobile-menu-open")) {
+              $("#mobile-menu-toggle").trigger("click");
+            }
+          }
+        });
+
+        // Highlight active sidebar link on scroll
+        const sections = $("section");
+        const navLinks = $(".sidebar-link");
+
+        sections.each(function () {
+          const currentSection = $(this);
+          ScrollTrigger.create({
+            trigger: currentSection,
+            start: "top center",
+            end: "bottom center",
+            onToggle: (self) => {
+              if (self.isActive) {
+                const id = currentSection.attr("id");
+                navLinks.removeClass("active");
+                $(`.sidebar-link[href="#${id}"]`).addClass("active");
+              }
+            },
+          });
+        });
+
+        // Mobile menu toggle
+        $("#mobile-menu-toggle, #overlay").on("click", function () {
+          $("body").toggleClass("mobile-menu-open");
+        });
+
+        // --- Animations ---
+        // Staggered animation for sidebar links on load
+        gsap.from("#sidebar-nav .sidebar-link", {
+          duration: 0.8,
+          opacity: 0,
+          x: 50,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+        });
+
+        // Animate content on scroll
+        gsap.utils.toArray(".doc-content section").forEach((section) => {
+          gsap.from(section, {
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            ease: "power3.out",
+          });
+        });
+
+        // Copy button functionality
+        $("pre").each(function () {
+          const pre = $(this);
+          const codeBlock = pre.find("code");
+          if (codeBlock.length) {
+            if (!pre.find(".copy-btn").length) {
+              pre.append('<button class="copy-btn">کپی</button>');
+            }
+            const button = pre.find(".copy-btn");
+
+            button.on("click", function () {
+              const code = codeBlock.text();
+              navigator.clipboard.writeText(code).then(
+                function () {
+                  button.text("کپی شد!");
+                  gsap.fromTo(
+                    button,
+                    { backgroundColor: "#4ade80" },
+                    { backgroundColor: "#374151", duration: 2 }
+                  );
+                  setTimeout(function () {
+                    button.text("کپی");
+                  }, 2000);
+                },
+                function (err) {
+                  button.text("خطا!");
+                  gsap.fromTo(
+                    button,
+                    { backgroundColor: "#f87171" },
+                    { backgroundColor: "#374151", duration: 2 }
+                  );
+                }
+              );
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
