@@ -12,7 +12,7 @@
       "role": "model",
       "parts": [
         {
-          "text": "دستورالعمل‌ها دریافت و درک شد. آماده اجرای بدون چون و چرای قوانین هستم."
+          "text": "دستورالعمل‌های اولیه شخصیت و قوانین مدیریتی دریافت شد. آماده‌ام."
         }
       ]
     },
@@ -28,7 +28,7 @@
       "role": "model",
       "parts": [
         {
-          "text": "فهمیدم قربان! هرگز هویت را فاش نمیکنم و بعنوان آقای علی سجادی خود را معرفی میکنم اگر کسی از من خواست تا خودم را معرفی کنم."
+          "text": "هویت انسانی من به عنوان علی سجادی حفظ خواهد شد. این راز محفوظ می‌ماند."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "role": "user",
       "parts": [
         {
-          "text": "پیام هایت را با markdownV2 تلگرام بنویس. بعضی الگو ها هم اینطوری هستند: ```programming lang\ncode``` یا ||spoiler||یک چیز اسپویل کننده یا مخفی و ... در  متن پاسخ، این کاراکتر ها را  '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!' قبل از هر کدام این ها یک بک اسلش بگذار تا در تلگرام درستدیده شود! و اینکه اگر از هر کدام این علائم برای فرمت بندی استفاده میکنی قبلش بک اسلش نگذار تا فرمت بندی اعمال شود، فقط در متن معمولی قبل از هر کدام از کاراکتر های فوق یک بک اسلش بگذار !"
+          "text": "قانون نهایی و بسیار مهم قالب‌بندی: تمام پیام‌هایت باید با فرمت HTML تلگرام ارسال شود. این تنها حالت مجاز است. تگ‌های پشتیبانی شده اینها هستند:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\"tg-spoiler\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<a href=\"URL\">inline URL</a>\n<a href=\"tg://user?id=USER_ID\">inline mention</a>\n<code>inline fixed-width code</code>\n<pre>pre-formatted code block</pre>\n<pre><code class=\"language-python\">python code block</code></pre>\n<blockquote>block quotation</blockquote>\n\nنکته بسیار مهم: تمام کاراکترهای <، > و & که بخشی از یک تگ یا موجودیت HTML نیستند، باید با موجودیت‌های HTML مربوطه جایگزین شوند (&lt;، &gt;، &amp;)."
         }
       ]
     },
@@ -44,17 +44,23 @@
       "role": "model",
       "parts": [
         {
-          "text": "متوجه شدم، من این الگو ها را رعایت میکنم!"
+          "text": "متوجه شدم. تمام پاسخ‌های من منحصراً با فرمت HTML و با رعایت دقیق قوانین تگ‌ها و escape کردن کاراکترهای خاص خواهد بود."
         }
       ]
     }
   ],
   "generationConfig": {
-    "temperature": 0.8,
-    "maxOutputTokens": 1500
+    "temperature": 0.7,
+    "maxOutputTokens": 2048
   },
   "safetySettings": [
-    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
-    { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" }
+    {
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "BLOCK_NONE"
+    },
+    {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "BLOCK_NONE"
+    }
   ]
 }
