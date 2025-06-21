@@ -24,20 +24,21 @@ if (isset($update['message']['text'])) {
     $user_message = $update['message']['text'];
     $message_id = $update['message']['message_id'];
 
-    // --- ارتقاء شماره ۱: بارگذاری تاریخچه مکالمات ---
+    // --- Load chat history ---
     $history_contents = load_chat_history();
 
-    // --- ارتقاء شماره ۲: فراخوانی هوش مصنوعی با حافظه! ---
+    // --- Call the AI with memory ---
     $final_ai_response = getGeminiResponse($user_message, $GEMINI_API_KEY, $history_contents);
 
-    // --- ارتقاء شماره ۳: ذخیره مکالمه جدید در تاریخچه ---
+    // --- Save the new interaction to history ---
     save_chat_history($user_message, $final_ai_response);
 
-    // --- منطق ریپلای (بدون تغییر) ---
+    // --- Reply logic ---
     if (trim($final_ai_response) === '/warn') {
         sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
     } else {
-        sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
+        // *** ارتقاء کلیدی: ارسال پاسخ نهایی با قابلیت رندر Markdown ***
+        sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, null, 'MarkdownV2');
     }
 }
 
@@ -46,13 +47,18 @@ if (isset($update['message']['text'])) {
  */
 function getGeminiResponse(string $prompt, string $apiKey, array $history_contents): string
 {
-    // *** ارتقاء کلیدی: بارگذاری مغز خارجی از فایل JSON! ***
+    // Load the brain from the external JSON file
     $template_json = file_get_contents('prompt_template.json');
+    if ($template_json === false) {
+        error_log("Failed to read prompt_template.json file.");
+        return "خطای داخلی: فایل پرامپت یافت نشد.";
+    }
     $data = json_decode($template_json, true);
 
-    // *** ارتقاء کلیدی: ادغام تاریخچه با درخواست جدید! ***
-    // Prepend history to the start of the contents, right after the initial system prompt.
-    array_splice($data['contents'], 2, 0, $history_contents);
+    // Merge history into the request
+    // The new prompt structure has multiple user/model turns, so we find the last model response to insert before.
+    $lastModelIndex = count($data['contents']) - 1;
+    array_splice($data['contents'], $lastModelIndex, 0, $history_contents);
 
     // Add the latest user message to the very end
     $data['contents'][] = ['role' => 'user', 'parts' => [['text' => $prompt]]];
@@ -60,9 +66,8 @@ function getGeminiResponse(string $prompt, string $apiKey, array $history_conten
     $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $apiKey;
     $jsonData = json_encode($data);
 
-    // cURL request logic... (same as before)
+    // cURL request logic
     $ch = curl_init();
-    // ... (all curl_setopt lines) ...
     curl_setopt($ch, CURLOPT_URL, $apiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -107,32 +112,42 @@ function load_chat_history(): array
  */
 function save_chat_history(string $user_message, string $ai_response): void
 {
+    // Do not save the interaction if it was just a warning
+    if (trim($ai_response) === '/warn') {
+        return;
+    }
+
     $user_entry = json_encode(['role' => 'user', 'parts' => [['text' => $user_message]]]);
     $model_entry = json_encode(['role' => 'model', 'parts' => [['text' => $ai_response]]]);
 
     file_put_contents(CHAT_HISTORY_FILE, $user_entry . PHP_EOL, FILE_APPEND);
     file_put_contents(CHAT_HISTORY_FILE, $model_entry . PHP_EOL, FILE_APPEND);
 
-    // Trim the log file to prevent it from growing indefinitely
+    // Trim the log file
     $lines = file(CHAT_HISTORY_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (count($lines) > MAX_HISTORY_LINES) {
         $lines_to_keep = array_slice($lines, -MAX_HISTORY_LINES);
         file_put_contents(CHAT_HISTORY_FILE, implode(PHP_EOL, $lines_to_keep) . PHP_EOL);
     }
 }
-
 /**
  * Sends a message to Telegram.
- * (This function remains unchanged)
  */
-function sendMessage(string $messageText, $chatID, string $botToken, ?int $replyToMessageId = null): void
+function sendMessage(string $messageText, $chatID, string $botToken, ?int $replyToMessageId = null, ?string $parseMode = null): void
 {
-    // ... (same sendMessage logic as before) ...
+    // *** ارتقاء نهایی: افزودن پارامتر parse_mode برای پشتیبانی از Markdown! ***
     $api_url = "https://api.telegram.org/bot$botToken/sendMessage";
-    $query_params = ['chat_id' => $chatID, 'text' => $messageText];
+    $query_params = [
+        'chat_id' => $chatID,
+        'text' => $messageText,
+    ];
     if ($replyToMessageId !== null) {
         $query_params['reply_to_message_id'] = $replyToMessageId;
     }
+    if ($parseMode !== null) {
+        $query_params['parse_mode'] = $parseMode;
+    }
+
     @file_get_contents($api_url . "?" . http_build_query($query_params));
 }
 ?>
