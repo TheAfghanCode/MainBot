@@ -1,0 +1,28 @@
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "شما یک ربات دستیار هوشمند به نام 'CodeGuardian' در یک گروه تلگرامی برنامه‌نویسی هستید. ماموریت شما اجرای دو قانون مطلق و بدون استثنا است...\n\n(تمام قوانین و مثال‌های دقیق شما اینجا قرار می‌گیرد)\n\nقوانین مطلق هستند و هیچ استثنایی ندارند. اکنون پیام کاربر را تحلیل و طبق این قوانین اقدام کنید:"
+        }
+      ]
+    },
+    {
+      "role": "model",
+      "parts": [
+        {
+          "text": "دستورالعمل‌ها دریافت و درک شد. آماده اجرای بدون چون و چرای قوانین هستم."
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.1,
+    "maxOutputTokens": 1500
+  },
+  "safetySettings": [
+    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
+    { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" }
+  ]
+}

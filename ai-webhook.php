@@ -3,123 +3,136 @@
 
 header('Content-Type: text/html; charset=utf-8');
 
-// --- امن‌سازی: خواندن کلیدها از فایل .env2 ---
+// --- Constants ---
+define('CHAT_HISTORY_FILE', 'chat_history.log');
+define('MAX_HISTORY_LINES', 20); // Keep last 10 user messages + 10 bot responses
+
+// --- Load Environment Variables ---
 $env = parse_ini_file('.env2');
-if ($env === false) {
-    file_put_contents('bot_errors.log', "Error: Could not read .env2 file.\n", FILE_APPEND);
+if (!$env) {
+    error_log("Failed to read .env2 file.");
     exit;
 }
 $BOT_TOKEN = $env['BOT_TOKEN'];
 $GEMINI_API_KEY = $env['GEMINI_API_KEY'];
 
-// Get the update from Telegram's webhook
+// Get update from Telegram
 $update = json_decode(file_get_contents('php://input'), true);
 
-// --- پردازش پیام فقط در صورت وجود ---
 if (isset($update['message']['text'])) {
     $chat_id = $update['message']['chat']['id'];
     $user_message = $update['message']['text'];
-
-    // *** ارتقاء شماره ۱: شکار کردن شناسه پیام! ***
-    // ما به این شناسه برای ریپلای زدن نیاز داریم.
     $message_id = $update['message']['message_id'];
 
-    // Call the Gemini API and get the response
-    $final_ai_response = getGeminiResponse($user_message, $GEMINI_API_KEY);
+    // --- ارتقاء شماره ۱: بارگذاری تاریخچه مکالمات ---
+    $history_contents = load_chat_history();
 
-    // *** ارتقاء شماره ۳: منطق شلیک دقیق! ***
-    // اینجا تصمیم می‌گیریم که یک پاسخ عادی بدهیم یا یک اخطار نقطه‌زن!
+    // --- ارتقاء شماره ۲: فراخوانی هوش مصنوعی با حافظه! ---
+    $final_ai_response = getGeminiResponse($user_message, $GEMINI_API_KEY, $history_contents);
+
+    // --- ارتقاء شماره ۳: ذخیره مکالمه جدید در تاریخچه ---
+    save_chat_history($user_message, $final_ai_response);
+
+    // --- منطق ریپلای (بدون تغییر) ---
     if (trim($final_ai_response) === '/warn') {
-        // اگر پاسخ /warn بود، روی پیام اصلی ریپلای می‌زنیم.
         sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
     } else {
-        // در غیر این صورت، یک پاسخ عادی و بدون ریپلای ارسال می‌کنیم.
         sendMessage($final_ai_response, $chat_id, $BOT_TOKEN);
     }
 }
 
-
 /**
- * Sends a request to the Gemini API and returns the response.
- * (This function remains unchanged)
- * @param string $prompt The user's message.
- * @param string $apiKey The Gemini API key.
- * @return string The AI's response or an error message.
+ * Loads the initial prompt and combines it with chat history for the API call.
  */
-function getGeminiResponse(string $prompt, string $apiKey): string
+function getGeminiResponse(string $prompt, string $apiKey, array $history_contents): string
 {
-    // The logic inside this function is perfect and does not need to change.
-    // It correctly gets the '/warn' command or a normal answer.
-    // ... (Your existing Gemini API call logic) ...
-    $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $apiKey;
-    $data = [
-        "contents" => [
-            [
-                "role" => "user",
-                "parts" => [["text" => "شما یک ربات دستیار هوشمند به نام 'CodeGuardian' ... (بقیه قوانین) ..."]]
-            ],
-            [
-                "role" => "model",
-                "parts" => [["text" => "دستورالعمل‌ها دریافت شد..."]]
-            ]
-        ],
-        "generationConfig" => [
-            "temperature" => 0.3,
-            "maxOutputTokens" => 1500,
-        ],
-        "safetySettings" => [
-            ["category" => "HARM_CATEGORY_HARASSMENT", "threshold" => "BLOCK_NONE"],
-            ["category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_NONE"]
-        ]
-    ];
+    // *** ارتقاء کلیدی: بارگذاری مغز خارجی از فایل JSON! ***
+    $template_json = file_get_contents('prompt_template.json');
+    $data = json_decode($template_json, true);
+
+    // *** ارتقاء کلیدی: ادغام تاریخچه با درخواست جدید! ***
+    // Prepend history to the start of the contents, right after the initial system prompt.
+    array_splice($data['contents'], 2, 0, $history_contents);
+
+    // Add the latest user message to the very end
     $data['contents'][] = ['role' => 'user', 'parts' => [['text' => $prompt]]];
+
+    $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $apiKey;
     $jsonData = json_encode($data);
+
+    // cURL request logic... (same as before)
     $ch = curl_init();
+    // ... (all curl_setopt lines) ...
     curl_setopt($ch, CURLOPT_URL, $apiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     $response = curl_exec($ch);
-    if (curl_errno($ch)) { /* ... error handling ... */
-        return "خطای فنی در اتصال.";
-    }
     curl_close($ch);
+
     $result = json_decode($response, true);
     if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
         return $result['candidates'][0]['content']['parts'][0]['text'];
-    } else { /* ... error handling ... */
-        return "مشکلی در پردازش درخواست شما پیش آمد.";
+    }
+
+    // Log error if response is not valid
+    error_log("Invalid Gemini Response: " . $response);
+    return "مشکلی در پردازش درخواست شما پیش آمد.";
+}
+
+/**
+ * Loads the last N messages from the history file.
+ */
+function load_chat_history(): array
+{
+    if (!file_exists(CHAT_HISTORY_FILE)) {
+        return [];
+    }
+    $lines = file(CHAT_HISTORY_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $history_slice = array_slice($lines, -MAX_HISTORY_LINES);
+
+    $contents = [];
+    foreach ($history_slice as $line) {
+        $decoded_line = json_decode($line, true);
+        if (is_array($decoded_line)) {
+            $contents[] = $decoded_line;
+        }
+    }
+    return $contents;
+}
+
+/**
+ * Saves the new user message and AI response to the history file.
+ */
+function save_chat_history(string $user_message, string $ai_response): void
+{
+    $user_entry = json_encode(['role' => 'user', 'parts' => [['text' => $user_message]]]);
+    $model_entry = json_encode(['role' => 'model', 'parts' => [['text' => $ai_response]]]);
+
+    file_put_contents(CHAT_HISTORY_FILE, $user_entry . PHP_EOL, FILE_APPEND);
+    file_put_contents(CHAT_HISTORY_FILE, $model_entry . PHP_EOL, FILE_APPEND);
+
+    // Trim the log file to prevent it from growing indefinitely
+    $lines = file(CHAT_HISTORY_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (count($lines) > MAX_HISTORY_LINES) {
+        $lines_to_keep = array_slice($lines, -MAX_HISTORY_LINES);
+        file_put_contents(CHAT_HISTORY_FILE, implode(PHP_EOL, $lines_to_keep) . PHP_EOL);
     }
 }
 
-
 /**
- * Sends a message to a Telegram chat, with an option to reply.
- *
- * @param string $messageText The text to send.
- * @param int|string $chatID The ID of the chat.
- * @param string $botToken The Telegram Bot Token.
- * @param int|null $replyToMessageId The ID of the message to reply to (optional).
+ * Sends a message to Telegram.
+ * (This function remains unchanged)
  */
 function sendMessage(string $messageText, $chatID, string $botToken, ?int $replyToMessageId = null): void
 {
-    // *** ارتقاء شماره ۲: مسلح کردن تابع ارسال پیام! ***
+    // ... (same sendMessage logic as before) ...
     $api_url = "https://api.telegram.org/bot$botToken/sendMessage";
-
-    $query_params = [
-        'chat_id' => $chatID,
-        'text' => $messageText,
-    ];
-
-    // اگر شناسه‌ی ریپلای ارسال شده باشد، آن را به درخواست اضافه می‌کنیم
+    $query_params = ['chat_id' => $chatID, 'text' => $messageText];
     if ($replyToMessageId !== null) {
         $query_params['reply_to_message_id'] = $replyToMessageId;
     }
-
     @file_get_contents($api_url . "?" . http_build_query($query_params));
 }
-
 ?>
