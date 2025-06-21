@@ -36,7 +36,7 @@
       "role": "user",
       "parts": [
         {
-          "text": "قانون نهایی و بسیار مهم قالب‌بندی: تمام پیام‌هایت باید با فرمت HTML تلگرام ارسال شود. این تنها حالت مجاز است. تگ‌های پشتیبانی شده اینها هستند:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\"tg-spoiler\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<a href=\"URL\">inline URL</a>\n<a href=\"tg://user?id=USER_ID\">inline mention</a>\n<code>inline fixed-width code</code>\n<pre>pre-formatted code block</pre>\n<pre><code class=\"language-python\">python code block</code></pre>\n<blockquote>block quotation</blockquote>\n\nنکته بسیار مهم: تمام کاراکترهای <، > و & که بخشی از یک تگ یا موجودیت HTML نیستند، باید با موجودیت‌های HTML مربوطه جایگزین شوند (&lt;، &gt;، &amp;)."
+          "text": "قانون نهایی و بسیار مهم قالب‌بندی: تمام پیام‌هایت باید با فرمت HTML تلگرام ارسال شود. این تنها حالت مجاز است. لیست کامل تگ‌های پشتیبانی شده اینها هستند:\n- <b>, <strong> برای متن ضخیم.\n- <i>, <em> برای متن کج.\n- <u>, <ins> برای متن زیرخط دار.\n- <s>, <strike>, <del> برای متن خط خورده.\n- <tg-spoiler> یا <span class=\"tg-spoiler\"> برای متن مخفی (اسپویلر).\n- <a href=\"URL\"> برای لینک.\n- <a href=\"tg://user?id=USER_ID\"> برای منشن کردن کاربر.\n- <code> برای کد درون‌خطی.\n- <pre> برای بلوک کد.\n- <pre><code class=\"language-python\"> برای بلوک کد پایتون (زبان قابل تغییر است).\n- <blockquote> برای نقل قول. می‌توانید از ویژگی expandable نیز استفاده کنید: <blockquote expandable>.\n\n**قانون طلایی:** تمام کاراکترهای <، > و & که بخشی از یک تگ یا موجودیت HTML نیستند، باید **حتماً** با موجودیت‌های HTML مربوطه جایگزین شوند (&lt;، &gt;، &amp;). این قانون حیاتی است."
         }
       ]
     },
@@ -44,7 +44,7 @@
       "role": "model",
       "parts": [
         {
-          "text": "متوجه شدم. تمام پاسخ‌های من منحصراً با فرمت HTML و با رعایت دقیق قوانین تگ‌ها و escape کردن کاراکترهای خاص خواهد بود."
+          "text": "دانش‌نامه کامل قالب‌بندی HTML دریافت شد. من متعهدم که تمام پاسخ‌هایم را منحصراً با این فرمت و با رعایت دقیق تمام قوانین تگ‌ها و escape کردن کاراکترهای خاص ارسال کنم."
         }
       ]
     }
