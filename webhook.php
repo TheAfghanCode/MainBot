@@ -4,14 +4,15 @@ header('Content-Type: text/html; charset=utf-8');
 
 $env = parse_ini_file('.env');
 
-$BOT_TOKEN = getenv('BOT_TOKEN');
-// $BOT_TOKEN = $env['BOT_TOKEN'];
+ $BOT_TOKEN = getenv('BOT_TOKEN');
+//$BOT_TOKEN = $env['BOT_TOKEN'];
 
 $update = json_decode(file_get_contents('php://input'), true);
-if (!$update) exit('No update received');
+if (!$update)
+    exit('No update received');
 
 $CHANNEL_ID = getenv("LOG_CHANNEL");
-// $CHANNEL_ID = $env["LOG_CHANNEL"];
+//$CHANNEL_ID = $env["LOG_CHANNEL"];
 
 $logMessage = "🧾 New log at " . date("Y-m-d H:i:s") . "\n\n";
 $logMessage .= json_encode($update, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -32,18 +33,20 @@ if (isset($update['message'])) {
 
         if ($sessionState === "wr") {
             unlink($chatSession);
-            sendMessage("گزارش جدید از " . $update['message']['from']['username'] . "\n\n" . $text, $env["REPORT_CHAT_ID"]);
+            sendMessageRaw("گزارش جدید از " . "[" . $update['message']['from']['first_name'] . "](https://t.me/" . $update['message']['from']['username'] . ")\n\n" . escapeV2($text), $env["REPORT_CHAT_ID"]);
         }
     }
 
     if ($text === '/start') {
         $keyboard = [
-            'inline_keyboard' => [[
+            'inline_keyboard' => [
                 [
-                    'text' => 'اجرای مینی‌اپ',
-                    'url' => 'https://t.me/afghancodebot?startapp'
+                    [
+                        'text' => 'اجرای مینی‌اپ',
+                        'url' => 'https://t.me/afghancodebot?startapp'
+                    ]
                 ]
-            ]]
+            ]
         ];
 
         $reply = [
@@ -55,12 +58,14 @@ if (isset($update['message'])) {
         file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
     } elseif ($text === '/document') {
         $keyboard = [
-            'inline_keyboard' => [[
+            'inline_keyboard' => [
                 [
-                    'text' => 'اجرای مستندات پروژه',
-                    'url' => 'https://193b-149-54-56-236.ngrok-free.app/document.html'
+                    [
+                        'text' => 'اجرای مستندات پروژه',
+                        'url' => 'https://193b-149-54-56-236.ngrok-free.app/document.html'
+                    ]
                 ]
-            ]]
+            ]
         ];
 
         $reply = [
@@ -95,6 +100,29 @@ function sendMessage($messageText, $chatID)
     file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
 }
 
+function sendMessageRaw($messageText, $chatID)
+{
+    global $BOT_TOKEN;
+
+    $reply = [
+        'chat_id' => $chatID,
+        'text' => $messageText,
+        'parse_mode' => 'MarkdownV2',
+        'reply_markup' => json_encode([ // <-- Add json_encode() here!
+            'inline_keyboard' => [
+                [
+                    [
+                        'text' => 'پاسخ به کاربر 💬',
+                        'url' => 'tg://user?id=' . $chatID // A callback_data to identify the user
+                    ]
+                ]
+            ]
+        ])
+    ];
+
+    file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/sendMessage?" . http_build_query($reply));
+}
+
 function escapeV2($text)
 {
     $markdownSpecialChars = array('_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!');
@@ -102,7 +130,8 @@ function escapeV2($text)
     $result = null;
 
     $length = strlen($text);
-    if ($length === 0) return "";
+    if ($length === 0)
+        return "";
 
     for ($i = 0; $length > $i; $i++) {
         $charStr = $text[$i];
