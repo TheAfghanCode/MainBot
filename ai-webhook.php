@@ -37,7 +37,7 @@ if (isset($update['message']['text'])) {
     if (trim($final_ai_response) === '/warn') {
         sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
     } else {
-        sendMessage($final_ai_response, $chat_id, $BOT_TOKEN);
+        sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
     }
 }
 
