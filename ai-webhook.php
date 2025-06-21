@@ -40,7 +40,7 @@ try {
             sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, $message_id);
         } else {
             // *** بازگشت به تنظیمات قدرتمند MarkdownV2 ***
-            sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, null, 'MarkdownV2');
+            sendMessage($final_ai_response, $chat_id, $BOT_TOKEN, null, 'HTML');
         }
     }
 
